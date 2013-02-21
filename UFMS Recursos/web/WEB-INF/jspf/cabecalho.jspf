@@ -1,0 +1,48 @@
+<!-- cabeçalho -->
+<header>
+    <hgroup id="logo">
+        <h1>UFMS Recursos</h1>
+        <h2>Sistema de Gerência de Recursos da Universidade Federal de Mato Grosso do Sul</h2>
+    </hgroup>
+</header>
+<nav id="menu-bar" class="buttons">
+    <a href="index.jsp" class="button left"><span class="icon icon108"></span></a>
+    <div class="dropdown right">
+        <a href="#" class="button right"><span class="icon icon111"></span><span class="label">Cadastros</span><span class="toggle"></span></a>
+        <div class="dropdown-slider">
+            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Administradores</span></a>
+            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Professores</span></a>
+            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Cursos</span></a>
+            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Disciplinas</span></a>
+            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Equipamentos</span></a>
+        </div> <!-- /.dropdown-slider -->
+    </div> <!-- /.dropdown -->
+
+    <div class="dropdown left">
+        <a href="#" class="button left"><span class="icon icon159"></span><span class="label">Reservas</span><span class="toggle"></span></a>
+        <div class="dropdown-slider">
+            <a href="#" class="ddm"><span class="icon icon159"></span><span class="label">Projetores</span></a>
+            <a href="#" class="ddm"><span class="icon icon159"></span><span class="label">Computadores</span></a>
+            <a href="#" class="ddm"><span class="icon icon159"></span><span class="label">Áudio</span></a>
+        </div> <!-- /.dropdown-slider -->
+    </div> <!-- /.dropdown -->
+    <div class="dropdown right">
+        <button class="right"><span class="icon icon120"></span><span class="label">Relatórios</span><span class="toggle"></span></button>
+        <div class="dropdown-slider">
+            <a href="#" class="ddm"><span class="icon icon120"></span><span class="label">Administradores</span></a>
+            <a href="#" class="ddm"><span class="icon icon120"></span><span class="label">Professores</span></a>
+            <a href="#" class="ddm"><span class="icon icon120"></span><span class="label">Cursos</span></a>
+            <a href="#" class="ddm"><span class="icon icon120"></span><span class="label">Disciplinas</span></a>
+            <a href="#" class="ddm"><span class="icon icon120"></span><span class="label">Equipamentos</span></a>
+        </div> <!-- /.dropdown-slider -->
+    </div> <!-- /.dropdown -->
+
+    <div class="dropdown left">
+        <a href="#" class="button left"><span class="icon icon4"></span><span class="label">Meu Perfil</span><span class="toggle"></span></a>
+        <div class="dropdown-slider">
+            <a href="#" class="ddm"><span class="icon icon96"></span><span class="label">Opções</span></a>
+            <a href="#" class="ddm negative"><span class="icon icon151"></span><span class="label">Sair</span></a>
+        </div> <!-- /.dropdown-slider -->
+    </div> <!-- /.dropdown -->
+    <a href="#" class="button right"><span class="icon icon151"></span></a>
+</nav>

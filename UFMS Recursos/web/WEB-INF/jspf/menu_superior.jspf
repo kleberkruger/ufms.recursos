@@ -1,0 +1,7 @@
+<!-- any content can be specified here e.g.: -->
+<nav class="menu-superior">
+    <button type="button" id="btn-novo" title="Novo">Novo</button>
+    <button type="submit" id="btn-salvar" title="Salvar">Salvar</button>&nbsp;
+    <button type="button" id="btn-fechar" title="Fechar">Fechar</button>
+    <input type="text" name="pesquisar" id="pesquisar" placeholder="Pesquisar" size="30"/>
+</nav>

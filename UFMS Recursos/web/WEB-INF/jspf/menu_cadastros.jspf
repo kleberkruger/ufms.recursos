@@ -1,0 +1,15 @@
+<!-- any content can be specified here e.g.: -->
+<nav class="menu-lateral">
+    <h3>Servidores</h3>
+    <ul>
+        <li><a href="" class="current">Administradores</a></li>
+        <li><a href="">Professores</a></li>
+    </ul>
+    <h3>Recursos</h3>
+    <ul>
+        <li><a href="">Cursos</a></li>
+        <li><a href="">Disciplinas</a></li>
+        <li><a href="">Equipamentos</a></li>
+        <li><a href="">Tipos</a></li>        
+    </ul>
+</nav>

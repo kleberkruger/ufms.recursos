@@ -1,0 +1,8 @@
+<!-- any content can be specified here e.g.: -->
+<footer>
+    <h2>Sistema de Gerência de Recursos</h2>
+    <hgroup>
+        <address>Desenvolvido por: Kleber Kruger</address>
+        <address>@2012 Universidade Federal de Mato Grosso do Sul</address>
+    </hgroup>
+</footer>
