@@ -93,13 +93,24 @@ footer hgroup { float: right; }
     Tabela															
 *****************************************************************/
 a img { border: none; display: inline-block; }
-table { width: 100%; }
-table thead th { padding: 6px; background-color: #333; color: #F2F2F2;
-                 text-align: center; font-size: 12px; text-transform: uppercase;
+
+table { width:600px; border:1px solid #ccc; }
+table thead th { 
+    /* background-color:#ECECEC; border:1px solid #ddd; */ background-color:#fff; color:#111;
+    padding:6px; text-align:center; font-size:14px;
 }
-table tbody td { 
-    padding: 6px; text-align: center; color: #333;
-    border-bottom: 1px solid #F2F2F2;
+table thead th.header { cursor:pointer; }
+table tbody td { padding:6px; text-align:center; color:#333; }
+table tbody tr.odd td { background-color:#ffffcc; }
+table tbody tr.hover td { background-color:#a9d0f5; }
+table tbody tr.selected td{
+    background-color:#a9f5a9!important;
 }
-table tbody tr.selected td { background-color: /* verde -> */#A9F5A9 !important; }
-table tbody tr:hover td { background-color: #F2F2F2; }
+.pagedisplay {
+    width:40px; text-align:center; border:none; background-color:#f2f2f2; font-weight:900;
+}
+#pager span { 
+    font-weight:900; display:inline-block; margin:0 0 0 20px; 
+    color:#666; float:right;
+}
+#pager form { text-align:left; padding:10px; width:580px; }

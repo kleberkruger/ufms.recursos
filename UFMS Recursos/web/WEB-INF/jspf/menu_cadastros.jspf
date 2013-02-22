@@ -2,14 +2,14 @@
 <nav class="menu-lateral">
     <h3>Servidores</h3>
     <ul>
-        <li><a href="" class="current">Administradores</a></li>
-        <li><a href="">Professores</a></li>
+        <li><a href="administradores.jsp" class="current">Administradores</a></li>
+        <li><a href="professores.jsp">Professores</a></li>
     </ul>
     <h3>Recursos</h3>
     <ul>
-        <li><a href="">Cursos</a></li>
-        <li><a href="">Disciplinas</a></li>
-        <li><a href="">Equipamentos</a></li>
+        <li><a href="cursos.jsp">Cursos</a></li>
+        <li><a href="disciplinas.jsp">Disciplinas</a></li>
+        <li><a href="equipamentos.jsp">Equipamentos</a></li>
         <li><a href="">Tipos</a></li>        
     </ul>
 </nav>

@@ -10,11 +10,11 @@
     <div class="dropdown right">
         <a href="#" class="button right"><span class="icon icon111"></span><span class="label">Cadastros</span><span class="toggle"></span></a>
         <div class="dropdown-slider">
-            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Administradores</span></a>
-            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Professores</span></a>
-            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Cursos</span></a>
-            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Disciplinas</span></a>
-            <a href="#" class="ddm"><span class="icon icon111"></span><span class="label">Equipamentos</span></a>
+            <a href="administradores.jsp" class="ddm"><span class="icon icon111"></span><span class="label">Administradores</span></a>
+            <a href="professores.jsp" class="ddm"><span class="icon icon111"></span><span class="label">Professores</span></a>
+            <a href="cursos.jsp" class="ddm"><span class="icon icon111"></span><span class="label">Cursos</span></a>
+            <a href="disciplinas.jsp" class="ddm"><span class="icon icon111"></span><span class="label">Disciplinas</span></a>
+            <a href="equipamentos.jsp" class="ddm"><span class="icon icon111"></span><span class="label">Equipamentos</span></a>
         </div> <!-- /.dropdown-slider -->
     </div> <!-- /.dropdown -->
 
