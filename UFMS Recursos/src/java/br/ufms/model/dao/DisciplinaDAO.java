@@ -22,24 +22,29 @@ public class DisciplinaDAO implements InterfaceDAO<Disciplina> {
     private Pool pool;
 
     public DisciplinaDAO() {
-        pool = Pool.getPool();
+        pool = Pool.getInstance();
     }
 
     @Override
     public void inserir(Disciplina bean) throws SQLException {
         String sql = "INSERT INTO disciplinas (nome) VALUES (?)";
-
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
-
+        
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
             ps.executeUpdate();
-            ps.close();
 
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.first()) {
+                bean.setCodigo(rs.getInt(1));
+            }
+            ps.close();
+            rs.close();
+            
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -56,7 +61,7 @@ public class DisciplinaDAO implements InterfaceDAO<Disciplina> {
             ps.executeUpdate();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -113,13 +118,10 @@ public class DisciplinaDAO implements InterfaceDAO<Disciplina> {
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
         return lista;
     }
 
-    @Override
-    public List<Disciplina> buscarPorCodigo(Integer id) throws SQLException {
-        return null;
-    }
+    
 }

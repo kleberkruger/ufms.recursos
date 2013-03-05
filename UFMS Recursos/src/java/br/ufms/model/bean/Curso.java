@@ -4,13 +4,21 @@
  */
 package br.ufms.model.bean;
 
+import br.ufms.model.annotations.Column;
+import br.ufms.model.annotations.Id;
+import br.ufms.model.annotations.Table;
+
 /**
  *
  * @author Kleber
  */
+@Table (name = "cursos")
 public class Curso {
 
+    @Id (generatedKey = false)
+    @Column (name = "codCurso")
     private Integer codigo;
+    @Column (name = "nome")
     private String nome;
 
     /**

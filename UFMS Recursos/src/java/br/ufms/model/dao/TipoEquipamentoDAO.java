@@ -22,24 +22,29 @@ public class TipoEquipamentoDAO implements InterfaceDAO<TipoEquipamento> {
     private Pool pool;
 
     public TipoEquipamentoDAO() {
-        pool = Pool.getPool();
+        pool = Pool.getInstance();
     }
 
     @Override
     public void inserir(TipoEquipamento bean) throws SQLException {
         String sql = "INSERT INTO tipos_equipamentos (descricao) VALUES (?)";
-
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getDescricao());
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.first()) {
+                bean.setCodigo(rs.getInt(1));
+            }
             ps.close();
+            rs.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -56,7 +61,7 @@ public class TipoEquipamentoDAO implements InterfaceDAO<TipoEquipamento> {
             ps.executeUpdate();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -113,13 +118,8 @@ public class TipoEquipamentoDAO implements InterfaceDAO<TipoEquipamento> {
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
         return lista;
-    }
-
-    @Override
-    public List<TipoEquipamento> buscarPorCodigo(Integer id) throws SQLException {
-        return null;
     }
 }

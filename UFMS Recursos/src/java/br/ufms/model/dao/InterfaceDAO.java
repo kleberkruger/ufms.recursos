@@ -27,6 +27,4 @@ public interface InterfaceDAO<Bean> {
     public Bean carregar(Integer id) throws SQLException;
 
     public List<Bean> listar() throws SQLException;
-    
-    public List<Bean> buscarPorCodigo(Integer id) throws SQLException;
 }

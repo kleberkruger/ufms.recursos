@@ -5,92 +5,42 @@
 package br.ufms.utils.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
  * @author Kleber
  */
-public class Pool implements InterfacePool {
+public class Pool {
 
-    private static volatile Pool pool = null;
-    private String url, user, password;
-    private Integer maxConnections;
-    private ArrayBlockingQueue<Connection> freeConnections;
-    private HashMap<String, Connection> busyConnections;
+    private DataSource dataSource;
 
     private Pool() {
-        this("br.ufms.utils.db.resources.database");
-    }
-
-    private Pool(String dbInfoPath) {
-        // Cria um resource bundle para ler as informações de um arquivo.
-        ResourceBundle bundle = ResourceBundle.getBundle(dbInfoPath);
-        // Lê as informações do arquivo.
-        url = bundle.getString("url");
-        user = bundle.getString("user");
-        password = bundle.getString("password");
-        maxConnections = Integer.parseInt(bundle.getString("maxConnections"));
-
-        freeConnections = new ArrayBlockingQueue<Connection>(maxConnections, true);
-        busyConnections = new HashMap<String, Connection>();
-
         try {
-            Class.forName(bundle.getString("driver"));
-        } catch (ClassNotFoundException ex) {
-            System.err.println(ex.getMessage());
+            Context context = new InitialContext();
+            context = (Context) context.lookup("java:comp/env");
+            dataSource = (DataSource) context.lookup("jdbc/equipamentos");
+        } catch (NamingException ex) {
+            Logger.getLogger(Pool.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    @Override
-    public Connection getConnection() {
-        if (busyConnections.size() < maxConnections) {
-            try {
-                Connection conn = freeConnections.poll();
-                if (conn == null || (conn != null && conn.isClosed())) {
-                    conn = DriverManager.getConnection(url, user, password);
-                }
-                busyConnections.put(conn.toString(), conn);
-                return conn;
-            } catch (SQLException ex) {
-                System.err.println(ex.getMessage());
-            }
-        }
-        return null;
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
     }
 
-    @Override
-    public void freeConnection(Connection connection) {
-        try {
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-            freeConnections.add(connection);
-            busyConnections.remove(connection.toString());
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-        }
+    public static Pool getInstance() {
+        return PoolHolder.INSTANCE;
     }
 
-    /**
-     * Método que retorna o pool de conexões. O pool gerencia as conexões com o
-     * banco de dados, permitindo ou negando o acesso aos objetos do tipo
-     * Connection.
-     *
-     * @return the pool
-     */
-    public static Pool getPool() {
-        if (pool == null) {
-            synchronized (Pool.class) {
-                if (pool == null) {
-                    pool = new Pool();
-                }
-            }
-        }
-        return pool;
+    private static class PoolHolder {
+
+        private static final Pool INSTANCE = new Pool();
     }
 }

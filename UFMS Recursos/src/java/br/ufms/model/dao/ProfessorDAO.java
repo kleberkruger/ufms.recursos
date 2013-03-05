@@ -22,19 +22,19 @@ public class ProfessorDAO implements InterfaceDAO<Professor> {
     private Pool pool;
 
     public ProfessorDAO() {
-        pool = Pool.getPool();
+        pool = Pool.getInstance();
     }
 
     @Override
     public void inserir(Professor bean) throws SQLException {
         String sql = "INSERT INTO professores (nome, login, senha, siape, "
                 + "telefone, email) VALUES (?, ?, ?, ?, ?, ?)";
-
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
-
+        
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+
             ps.setString(1, bean.getNome());
             ps.setString(2, bean.getLogin());
             ps.setString(3, bean.getSenha());
@@ -42,10 +42,16 @@ public class ProfessorDAO implements InterfaceDAO<Professor> {
             ps.setString(5, bean.getTelefone());
             ps.setString(6, bean.getEmail());
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.first()) {
+                bean.setCodigo(rs.getInt(1));
+            }
             ps.close();
+            rs.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -67,7 +73,7 @@ public class ProfessorDAO implements InterfaceDAO<Professor> {
             ps.executeUpdate();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -133,13 +139,8 @@ public class ProfessorDAO implements InterfaceDAO<Professor> {
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
         return lista;
-    }
-
-    @Override
-    public List<Professor> buscarPorCodigo(Integer id) throws SQLException {
-        return null;
     }
 }

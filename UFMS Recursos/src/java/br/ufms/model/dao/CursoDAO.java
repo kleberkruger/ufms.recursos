@@ -22,25 +22,23 @@ public class CursoDAO implements InterfaceDAO<Curso> {
     private Pool pool;
 
     public CursoDAO() {
-        pool = Pool.getPool();
+        pool = Pool.getInstance();
     }
 
     @Override
     public void inserir(Curso bean) throws SQLException {
         String sql = "INSERT INTO cursos (codCurso, nome) VALUES (?, ?)";
-
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
-
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getCodigo());
             ps.setString(2, bean.getNome());
             ps.executeUpdate();
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -48,17 +46,15 @@ public class CursoDAO implements InterfaceDAO<Curso> {
     public void atualizar(Curso bean) throws SQLException {
         String sql = "UPDATE cursos SET codCurso = ?, nome = ? WHERE codCurso = ?";
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, bean.getCodigo());
             ps.setString(2, bean.getNome());
             ps.setInt(3, bean.getCodigo());
-
             ps.executeUpdate();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -70,27 +66,41 @@ public class CursoDAO implements InterfaceDAO<Curso> {
     @Override
     public void excluirPorCodigo(Integer id) throws SQLException {
         String sql = "DELETE FROM cursos WHERE codCurso = ?";
-        PreparedStatement ps = pool.getConnection().prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.executeUpdate();
+        Connection conn = pool.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } finally {
+            conn.close();
+        }
     }
 
     @Override
     public void excluirTodos() throws SQLException {
         String sql = "DELETE FROM cursos";
-        pool.getConnection().createStatement().execute(sql);
+        Connection conn = pool.getConnection();
+        try {
+            conn.createStatement().execute(sql);
+        } finally {
+            conn.close();
+        }
     }
 
     @Override
     public Curso carregar(Integer id) throws SQLException {
         String sql = "SELECT * FROM cursos WHERE codCurso = " + id;
-        ResultSet rs = pool.getConnection().prepareStatement(sql).executeQuery();
+        Connection conn = pool.getConnection();
         Curso curso = null;
-
-        while (rs.next()) {
-            curso = new Curso();
-            curso.setCodigo(rs.getInt("codCurso"));
-            curso.setNome(rs.getString("nome"));
+        try {
+            ResultSet rs = conn.prepareStatement(sql).executeQuery();
+            while (rs.next()) {
+                curso = new Curso();
+                curso.setCodigo(rs.getInt("codCurso"));
+                curso.setNome(rs.getString("nome"));
+            }
+        } finally {
+            conn.close();
         }
         return curso;
     }
@@ -115,13 +125,10 @@ public class CursoDAO implements InterfaceDAO<Curso> {
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
         return lista;
     }
 
-    @Override
-    public List<Curso> buscarPorCodigo(Integer id) throws SQLException {
-        return null;
-    }
+    
 }

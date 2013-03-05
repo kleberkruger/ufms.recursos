@@ -29,19 +29,20 @@ public class DisciplinaVinculadaDAO {
         String sql = "INSERT INTO disciplinas_vinculadas (codCurso, codDisc, "
                 + "codProf) VALUES (?, ?, ?)";
         Connection connection = pool.getConnection();
-        PreparedStatement ps;
-
+        
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            
             ps.setInt(1, bean.getCurso().getCodigo());
             ps.setInt(2, bean.getDisciplina().getCodigo());
             ps.setInt(3, bean.getProfessor().getCodigo());
+            
             ps.executeUpdate();
-
             ps.close();
 
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 
@@ -57,7 +58,7 @@ public class DisciplinaVinculadaDAO {
             ps.setInt(3, bean.getProfessor().getCodigo());
             ps.executeUpdate();
         } finally {
-            pool.freeConnection(connection);
+            connection.close();
         }
     }
 

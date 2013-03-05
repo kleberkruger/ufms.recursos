@@ -22,45 +22,46 @@ public class AdministradorDAO implements InterfaceDAO<Administrador> {
     private Pool pool;
 
     public AdministradorDAO() {
-        pool = Pool.getPool();
+        pool = Pool.getInstance();
     }
 
     @Override
     public void inserir(Administrador bean) throws SQLException {
-        String sql = "INSERT INTO administradores (nome, usuario, senha) VALUES (?, ?, ?)";
-
-        Connection connection = pool.getConnection();
-        PreparedStatement ps;
-
+        String sql = "INSERT INTO administradores (nome, usuario, senha) "
+                + "VALUES (?, ?, ?)";
+        Connection conn = pool.getConnection();
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
             ps.setString(2, bean.getUsuario());
             ps.setString(3, bean.getSenha());
             ps.executeUpdate();
 
-            ps.close();
-
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.first()) {
+                bean.setCodigo(rs.getInt(1));
+            }
         } finally {
-            pool.freeConnection(connection);
+            conn.close();
         }
     }
 
     @Override
     public void atualizar(Administrador bean) throws SQLException {
-        String sql = "UPDATE administradores SET nome = ?, usuario = ?, senha = ? "
-                + "WHERE codAdmin = ?";
-        Connection connection = pool.getConnection();
-        PreparedStatement ps;
+        String sql = "UPDATE administradores SET nome = ?, usuario = ?, "
+                + "senha = ? WHERE codAdmin = ?";
+        Connection conn = pool.getConnection();
         try {
-            ps = connection.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, bean.getNome());
             ps.setString(2, bean.getUsuario());
             ps.setString(3, bean.getSenha());
             ps.setInt(4, bean.getCodigo());
             ps.executeUpdate();
+
         } finally {
-            pool.freeConnection(connection);
+            conn.close();
         }
     }
 
@@ -78,29 +79,69 @@ public class AdministradorDAO implements InterfaceDAO<Administrador> {
     @Override
     public void excluirPorCodigo(Integer id) throws SQLException {
         String sql = "DELETE FROM administradores WHERE codAdmin = ?";
-        PreparedStatement ps = pool.getConnection().prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.executeUpdate();
+        Connection conn = pool.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } finally {
+            conn.close();
+        }
     }
 
     @Override
     public void excluirTodos() throws SQLException {
         String sql = "DELETE FROM administradores";
-        pool.getConnection().createStatement().execute(sql);
+        Connection conn = pool.getConnection();
+        try {
+            conn.createStatement().execute(sql);
+        } finally {
+            conn.close();
+        }
     }
 
     @Override
     public Administrador carregar(Integer id) throws SQLException {
-        String sql = "SELECT * FROM administradores WHERE codAdmin = " + id;
-        ResultSet rs = pool.getConnection().prepareStatement(sql).executeQuery();
+        String sql = "SELECT * FROM administradores WHERE codAdmin = ?";
+        Connection conn = pool.getConnection();
         Administrador administrador = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            administrador = new Administrador();
-            administrador.setCodigo(rs.getInt("codAdmin"));
-            administrador.setNome(rs.getString("nome"));
-            administrador.setUsuario(rs.getString("usuario"));
-            administrador.setSenha(rs.getString("senha"));
+            if (rs.first()) {
+                administrador = new Administrador();
+                administrador.setCodigo(rs.getInt("codAdmin"));
+                administrador.setNome(rs.getString("nome"));
+                administrador.setUsuario(rs.getString("usuario"));
+                administrador.setSenha(rs.getString("senha"));
+            }
+        } finally {
+            conn.close();
+        }
+        return administrador;
+    }
+
+    public Administrador carregar(String usuario) throws SQLException {
+        String sql = "SELECT * FROM administradores WHERE usuario = ?";
+        Connection conn = pool.getConnection();
+        Administrador administrador = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, usuario);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                administrador = new Administrador();
+                administrador.setCodigo(rs.getInt("codAdmin"));
+                administrador.setNome(rs.getString("nome"));
+                administrador.setUsuario(rs.getString("usuario"));
+                administrador.setSenha(rs.getString("senha"));
+            }
+        } finally {
+            conn.close();
         }
         return administrador;
     }
@@ -108,11 +149,10 @@ public class AdministradorDAO implements InterfaceDAO<Administrador> {
     @Override
     public List<Administrador> listar() throws SQLException {
         String sql = "SELECT * FROM administradores ORDER BY nome";
-        Connection connection = pool.getConnection();
+        Connection conn = pool.getConnection();
         List<Administrador> lista = new ArrayList<Administrador>();
-
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -123,17 +163,11 @@ public class AdministradorDAO implements InterfaceDAO<Administrador> {
                 administrador.setSenha(rs.getString("senha"));
                 lista.add(administrador);
             }
-            rs.close();
-            ps.close();
-
         } finally {
-            pool.freeConnection(connection);
+            conn.close();
         }
         return lista;
     }
 
-    @Override
-    public List<Administrador> buscarPorCodigo(Integer id) throws SQLException {
-        return null;
-    }
+    
 }

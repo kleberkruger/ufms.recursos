@@ -4,15 +4,25 @@
  */
 package br.ufms.model.bean;
 
+import br.ufms.model.annotations.Column;
+import br.ufms.model.annotations.Id;
+import br.ufms.model.annotations.Table;
+
 /**
  *
  * @author Kleber
  */
+@Table(name = "administradores")
 public class Administrador {
 
+    @Id
+    @Column(name = "codAdmin")
     private Integer codigo;
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "usuario")
     private String usuario;
+    @Column(name = "senha")
     private String senha;
 
     /**
